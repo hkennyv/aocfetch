@@ -19,10 +19,10 @@ var rootCmd = &cobra.Command{
 	Use:   "aocfetch",
 	Short: "aocfetch - Advent of Code input fetcher",
 	Long:  "Fetches Advent of Code inputs by year and day from your CLI! Downloads today's input by default (if valid)",
-	Run:   run,
+	Run:   runRoot,
 }
 
-func run(cmd *cobra.Command, args []string) {
+func runRoot(cmd *cobra.Command, args []string) {
 	err := validateFlags(Year, Day)
 	if err != nil {
 		fmt.Println(err)

@@ -5,6 +5,15 @@
 A CLI tool used to fetch [Advent of Code](https://adventofcode.com/about)
 input by year/day/part.
 
+## Features
+
+- [x] Fetch input from [Advent of Code](https://adventofcode.com/about)
+- [x] Configurable config path
+- [ ] Cache input in `.aocfetch`
+- [ ] Copy input from cache to destination
+- [ ] Pull command to sync all inputs
+- [ ] Fetch session from browser - maybe (w/ [kooky](https://github.com/zellyn/kooky)?)
+
 ## Usage
 
 ```

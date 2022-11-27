@@ -9,15 +9,15 @@ import (
 )
 
 const BaseUrl = "https://adventofcode.com"
+const UserAgent = "github.com/hkennyv/aocfetch"
 
 func FetchInput(year, day int) ([]byte, error) {
-	url := fmt.Sprintf("%s/%d/day/%d/input", BaseUrl, year, day)
+	url := makeAocUrl(year, day)
 
 	// TODO: implement caching before fetch
 	body, err := fetchAocUrl(url)
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		return nil, err
 	}
 
 	return body, nil
@@ -56,7 +56,7 @@ func fetchAocUrl(url string) ([]byte, error) {
 	cookie.Value = session
 
 	req.AddCookie(cookie)
-	req.Header.Add("user-agent", "github.com/hkennyv/aocfetch")
+	req.Header.Add("user-agent", UserAgent)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -70,6 +70,10 @@ func fetchAocUrl(url string) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func makeAocUrl(year, day int) string {
+	return fmt.Sprintf("%s/%d/day/%d/input", BaseUrl, year, day)
 }
 
 // TODO: refactor this to read from a config file
