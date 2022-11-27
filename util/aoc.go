@@ -1,6 +1,7 @@
 package util
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -11,10 +12,14 @@ import (
 const BaseUrl = "https://adventofcode.com"
 const UserAgent = "github.com/hkennyv/aocfetch"
 
-func FetchInput(year, day int) ([]byte, error) {
+// TODO
+func YearIsStarted(year int) bool {
+	return true
+}
+
+func FetchDay(year, day int) ([]byte, error) {
 	url := makeAocUrl(year, day)
 
-	// TODO: implement caching before fetch
 	body, err := fetchAocUrl(url)
 	if err != nil {
 		return nil, err
@@ -64,9 +69,15 @@ func fetchAocUrl(url string) ([]byte, error) {
 	}
 
 	defer resp.Body.Close()
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	// check status code
+	if resp.StatusCode != 200 {
+		return nil, errors.New(string(body))
 	}
 
 	return body, nil

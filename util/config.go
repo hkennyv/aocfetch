@@ -1,62 +1,39 @@
 package util
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path"
 	"path/filepath"
 )
 
-func InitConfigSpace(p string) error {
-	// make config path if not provided
-	if p == "" {
+func GetConfigDir(configDir string) string {
+	if configDir == "" {
 		d, err := os.UserConfigDir()
 		if err != nil {
-			return err
+			fmt.Println(err)
+			os.Exit(1)
 		}
-		p = d
+		configDir = d
 	}
 
-	// resolve relative paths if given
-	p, err := filepath.Abs(path.Join(p, ".aocfetch"))
+	// resolve relative paths
+	configDir, err := filepath.Abs(path.Join(configDir, ".aocfetch"))
 	if err != nil {
-		return err
+		fmt.Println(err)
+		os.Exit(1)
 	}
 
-	err = makeIfNotExists(p)
+	return configDir
+}
+
+func InitConfigDir(configDir string) error {
+	configDir = GetConfigDir(configDir)
+
+	err := MakeIfNotExists(configDir)
 	if err != nil {
 		return err
 	}
 
 	return nil
-}
-
-func makeIfNotExists(p string) error {
-	// if doesn't exist, make it w/ drwxr-xr-x
-	if b, err := pathExists(p); !b {
-		if err != nil {
-			return err
-		}
-
-		fmt.Printf("%s does not exist - creating for the first time\n", p)
-		err = os.Mkdir(p, 0755)
-		if err != nil {
-			return err
-		}
-
-		return err
-	}
-
-	return nil
-}
-
-func pathExists(p string) (bool, error) {
-	if _, err := os.Stat(p); err == nil {
-		return true, nil
-	} else if errors.Is(err, os.ErrNotExist) {
-		return false, nil
-	} else {
-		return false, err
-	}
 }
