@@ -12,11 +12,6 @@ import (
 const BaseUrl = "https://adventofcode.com"
 const UserAgent = "github.com/hkennyv/aocfetch"
 
-// TODO
-func YearIsStarted(year int) bool {
-	return true
-}
-
 func FetchDay(year, day int) ([]byte, error) {
 	url := makeAocUrl(year, day)
 

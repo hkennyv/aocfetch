@@ -22,7 +22,9 @@ func Main() {
 	rootCmd.Flags().StringVarP(&ConfigDir, "directory", "d", "",
 		`Path to desired config directory, defaults to $HOME on Mac, %AppData%
 on Windows, and $XDG_CONFIG_HOME on linux`)
+
 	rootCmd.AddCommand(syncCmd)
+	rootCmd.AddCommand(todayCmd)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

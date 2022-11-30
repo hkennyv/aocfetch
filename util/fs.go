@@ -61,3 +61,19 @@ func CreateFile(name string, data []byte) error {
 	}
 	return nil
 }
+
+func CopyFile(dest, configDir string, year, day int) error {
+	p := GetDayFile(configDir, year, day)
+
+	data, err := os.ReadFile(p)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(dest, data, 0644)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -32,6 +32,13 @@ func ValidateYear(year int) error {
 		return errors.New("advent of code started in 2015, so year must be between 2015 and the current year inclusive")
 	}
 
+	loc := time.FixedZone("UTC-5", -5*60*60)
+	yearStart := time.Date(year, 12, 1, 0, 0, 0, 0, loc)
+
+	if now.Before(yearStart) {
+		return errors.New("advent of code has not started this year yet")
+	}
+
 	return nil
 }
 

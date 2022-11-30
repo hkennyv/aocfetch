@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"aocfetch/util"
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -27,6 +26,22 @@ var syncCmd = &cobra.Command{
 
 func runSync(cmd *cobra.Command, args []string) {
 	now := time.Now()
+
+	if len(args) == 1 {
+		err := util.ValidateYear(Year)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
+
+	if len(args) == 2 {
+		err := util.ValidateDate(Year, Day)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
 
 	// ensure configdir has been initialized
 	err := util.InitConfigDir(ConfigDir)
@@ -90,11 +105,6 @@ func handleArgs(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
-		err = util.ValidateDate(year, day)
-		if err != nil {
-			return err
-		}
-
 		Year = year
 		Day = day
 	}
@@ -106,11 +116,6 @@ func handleArgs(cmd *cobra.Command, args []string) error {
 			return err
 		}
 
-		err = util.ValidateYear(year)
-		if err != nil {
-			return err
-		}
-
 		Year = year
 	}
 
@@ -118,11 +123,6 @@ func handleArgs(cmd *cobra.Command, args []string) error {
 }
 
 func syncYear(year int) error {
-	if !util.YearIsStarted(year) {
-		msg := fmt.Sprintf("✗ you're early! aoc %d has not started yet!", year)
-		return errors.New(msg)
-	}
-
 	for day := 1; day <= 25; day++ {
 		err := syncDay(year, day)
 		if err != nil {
